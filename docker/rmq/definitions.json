@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "name": "O=client,CN=rmq-1",
+      "password_hash": "lNED8rU6Rn52istIvSYx7vK9Eg4wZcWpJRr+e/MRCC4lheX7",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator",
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "O=client,CN=rmq-1",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [],
+  "policies": [],
+  "queues": [],
+  "exchanges": [],
+  "bindings": []
+}

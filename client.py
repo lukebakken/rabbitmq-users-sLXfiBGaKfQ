@@ -6,14 +6,19 @@ import sys
 import time
 import traceback
 
+from pika.credentials import ExternalCredentials
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.info("ssl.HAS_SNI: %s", ssl.HAS_SNI)
 context = ssl.create_default_context(cafile="./certs/ca_certs.pem")
-context.load_cert_chain("./certs/rmq-1/client_rmq-1_certificate.pem", "./certs/rmq-1/client_rmq-1_key.pem")
+context.load_cert_chain(
+    "./certs/rmq-1/client_rmq-1_certificate.pem", "./certs/rmq-1/client_rmq-1_key.pem"
+)
 ssl_options = pika.SSLOptions(context, server_hostname="rmq-0")
+creds = ExternalCredentials()
 conn_params = pika.ConnectionParameters(
-    host="rmq-0", port=5671, ssl_options=ssl_options
+    credentials=creds, host="rmq-0", port=5671, ssl_options=ssl_options
 )
 
 sigterm_caught = False
@@ -25,6 +30,9 @@ def sigterm_handler(_signo, _stack_frame):
 
 
 signal.signal(signal.SIGTERM, sigterm_handler)
+
+logger.info("sleeping 5 seconds before initial connect...")
+time.sleep(5)
 
 while not sigterm_caught:
     try:
