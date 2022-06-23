@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  rabbitnet:
+    name: rabbitnet
+    driver: bridge
+
+services:
+  rmq-0:
+    image: rabbitmq-users-sLXfiBGaKfQ:latest
+    hostname: rmq-0
+    networks:
+      rabbitnet:
+        aliases:
+          - rmq-0.local
+    ports:
+      # HOST:CONTAINER
+      - 15671:15671
+      - 15672:15672
+  pika-client:
+    image: rabbitmq-users-sLXfiBGaKfQ-pika:latest
+    hostname: pika-client
+    networks:
+      rabbitnet:
+        aliases:
+          - pika-client.local
+    command:
+      - --uri=amqp://haproxy.local
+    restart: on-failure
+    depends_on:
+      - rmq-0

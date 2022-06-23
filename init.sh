@@ -10,9 +10,19 @@ git submodule update --init
 
 for ((i = 0; i < 2; i++))
 do
-    make -C "$dir/tls-gen/basic" "CN=localhost_$i"
-    cp -v "$dir/tls-gen/basic/result/"*.pem "$dir/certs/ca_$i"
+    ca_certfile="$dir/certs/rmq-$i/ca_certificate.pem"
+    if [[ -s $ca_certfile ]]
+    then
+        echo "[INFO] file '$ca_certfile' already exists, not regenerating!"
+    else
+        make -C "$dir/tls-gen/basic" "CN=rmq-$i"
+        cp -v "$dir/tls-gen/basic/result/"*.pem "$dir/certs/rmq-$i"
+    fi
 done
+
+# docker build --tag rabbitmq-users-slxfibgakfq:latest --file "$dir/docker/rmq/Dockerfile" .
+
+docker build --tag rabbitmq-users-slxfibgakfq-pika:latest --file "$dir/docker/pika/Dockerfile" .
 
 ## {
 ##     cd "$dir/rabbitmq-server" && asdf local erlang 24.3.4 && asdf local elixir 1.12.3-otp-24
