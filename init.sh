@@ -8,7 +8,11 @@ readonly dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
 git submodule update --init
 
-make -C "$dir/tls-gen/basic" CN=localhost
+for ((i = 0; i < 2; i++))
+do
+    make -C "$dir/tls-gen/basic" "CN=localhost_$i"
+    cp -v "$dir/tls-gen/basic/result/"*.pem "$dir/certs/ca_$i"
+done
 
 ## {
 ##     cd "$dir/rabbitmq-server" && asdf local erlang 24.3.4 && asdf local elixir 1.12.3-otp-24
