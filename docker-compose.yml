@@ -7,25 +7,20 @@ networks:
 
 services:
   rmq-0:
-    image: rabbitmq-users-sLXfiBGaKfQ:latest
+    image: rabbitmq-users-slxfibgakfq:latest
     hostname: rmq-0
     networks:
-      rabbitnet:
-        aliases:
-          - rmq-0.local
+      - rabbitnet
     ports:
       # HOST:CONTAINER
+      - 5671:5671
       - 15671:15671
       - 15672:15672
   pika-client:
-    image: rabbitmq-users-sLXfiBGaKfQ-pika:latest
+    image: rabbitmq-users-slxfibgakfq-pika:latest
     hostname: pika-client
     networks:
-      rabbitnet:
-        aliases:
-          - pika-client.local
-    command:
-      - --uri=amqp://haproxy.local
+      - rabbitnet
     restart: on-failure
     depends_on:
       - rmq-0
