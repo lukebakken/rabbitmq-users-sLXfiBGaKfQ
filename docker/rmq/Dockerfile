@@ -12,8 +12,12 @@ RUN mkdir -p /etc/rabbitmq/trust_store && chown rabbitmq:rabbitmq /etc/rabbitmq/
 # COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-0/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-0-ca.pem
 
 # This is if you want all CAs to be trusted
-COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-0/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-0-ca.pem
-COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-1/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-1-ca.pem
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-0/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-0-ca.pem
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-1/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-1-ca.pem
+
+# Test if we can use client certificate to whitelist directly
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-1/client_rmq-1_certificate.pem /etc/rabbitmq/trust_store/client_rmq-1_certificate.pem
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-0/client_rmq-0_certificate.pem /etc/rabbitmq/trust_store/client_rmq-0_certificate.pem
 
 # NOTE: we only use the rmq-0 CA certificate here. This means that since the client presents a cert signed
 # by the rmq-1 CA, it will be rejected UNLESS the rmq-1 CA is in the trust_store dir
