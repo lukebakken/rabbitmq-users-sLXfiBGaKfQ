@@ -1,2 +1,11 @@
 venv/
 .DS_Store
+*tls-gen*
+*.pem
+*.p12
+*.csr
+*.txt
+serial
+*.attr
+*.cer
+*.old
