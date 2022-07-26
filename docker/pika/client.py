@@ -11,11 +11,11 @@ from pika.credentials import ExternalCredentials
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.info("ssl.HAS_SNI: %s", ssl.HAS_SNI)
-context = ssl.create_default_context(cafile="./certs/ca_certs.pem")
+context = ssl.create_default_context(cafile="./certs/rmq-1/ca-chain.cert.pem")
 context.load_cert_chain(
-    "./certs/rmq-1/client_rmq-1_certificate.pem", "./certs/rmq-1/client_rmq-1_key.pem"
+    "./certs/rmq-1/rmq-1.cert.pem", "./certs/rmq-1/rmq-1.key.pem"
 )
-ssl_options = pika.SSLOptions(context, server_hostname="rmq-0")
+ssl_options = pika.SSLOptions(context, server_hostname="localhost")
 creds = ExternalCredentials()
 conn_params = pika.ConnectionParameters(
     credentials=creds, host="rmq-0", port=5671, ssl_options=ssl_options

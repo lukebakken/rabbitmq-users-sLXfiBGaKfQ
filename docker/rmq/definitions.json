@@ -1,15 +1,8 @@
 {
   "users": [
     {
-      "name": "O=client,CN=rmq-1",
+      "name": "CN=rmq-1,OU=crlTesting,O=crlTesting,ST=ProvinceName,C=US",
       "password_hash": "lNED8rU6Rn52istIvSYx7vK9Eg4wZcWpJRr+e/MRCC4lheX7",
-      "hashing_algorithm": "rabbit_password_hashing_sha256",
-      "tags": "administrator",
-      "limits": {}
-    },
-    {
-      "name": "O=client,CN=rmq-0",
-      "password_hash": "d602cf393aa3d832aa2c46dc7b26b4d587305a199dd8f09ba9ae17f29c0cbba6",
       "hashing_algorithm": "rabbit_password_hashing_sha256",
       "tags": "administrator",
       "limits": {}
@@ -22,14 +15,7 @@
   ],
   "permissions": [
     {
-      "user": "O=client,CN=rmq-1",
-      "vhost": "/",
-      "configure": ".*",
-      "write": ".*",
-      "read": ".*"
-    },
-    {
-      "user": "O=client,CN=rmq-0",
+      "user": "CN=rmq-1,OU=crlTesting,O=crlTesting,ST=ProvinceName,C=US",
       "vhost": "/",
       "configure": ".*",
       "write": ".*",
