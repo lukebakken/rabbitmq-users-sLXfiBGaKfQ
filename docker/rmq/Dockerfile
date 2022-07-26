@@ -8,13 +8,17 @@ COPY --chown=rabbitmq:rabbitmq ./docker/rmq/definitions.json /etc/rabbitmq/
 RUN mkdir -p /etc/rabbitmq/certs && chown rabbitmq:rabbitmq /etc/rabbitmq/certs
 RUN mkdir -p /etc/rabbitmq/trust_store && chown rabbitmq:rabbitmq /etc/rabbitmq/trust_store
 
-# Test if we can use client certificate to whitelist directly
-# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/client/cert.pem /etc/rabbitmq/trust_store/client_rmq_certificate.pem
+# This only trusts client certs that have been signed by the rmq-0 CA cert
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-0/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-0-ca.pem
 
-# Now uses the intermediate_ca_server CA certificate
-COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/intermediate_ca_server/certs/ca-chain-server.pem /etc/rabbitmq/certs/ca.pem
-COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/server/cert.pem /etc/rabbitmq/certs
-COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/server/key.pem /etc/rabbitmq/certs
+# This is if you want all CAs to be trusted
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-0/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-0-ca.pem
+# COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certs/rmq-1/ca_certificate.pem /etc/rabbitmq/trust_store/rmq-1-ca.pem
 
+# NOTE: we only use the rmq-0 CA certificate here. This means that since the client presents a cert signed
+# by the rmq-1 CA, it will be rejected UNLESS the rmq-1 CA is in the trust_store dir
+COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/rmq-0/ca-chain.cert.pem /etc/rabbitmq/certs/ca.pem
+COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/rmq-0/server.cert.pem /etc/rabbitmq/certs/server_rmq-0_certificate.pem
+COPY --chown=rabbitmq:rabbitmq --chmod=0400 ./certificates/rmq-0/server.key.pem /etc/rabbitmq/certs/server_rmq-0_key.pem
 
 EXPOSE 4369 5671 5672 15671 15672 15692 25672 35672-35682
