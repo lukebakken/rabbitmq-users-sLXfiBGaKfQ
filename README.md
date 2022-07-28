@@ -29,7 +29,7 @@ I also came across the following part in the RabbitMQ Documentations that talks 
 
 1. If the server certificate and client certificates are not signed by the same, immediate CA, the trust store is able to block the client from connecting to the broker. 
 ### Certificate Structure: 
-ROOT CA
+**ROOT CA**
   - IntermediateClient CA
     - IssuingClient CA
       - rmq-1 (**client certificate**)
