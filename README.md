@@ -25,19 +25,24 @@ In line 86 - 87, there is an option for the ssl_options.depth:
 I also came across the following part in the RabbitMQ Documentations that talks about the depth: 
 [Certificate Chains and Verification Depth](https://www.rabbitmq.com/ssl.html#peer-verification-depth) 
 
-## Hypothesis
+### Hypothesis 1
 
-1. If the server certificate and client certificates are not signed by the same, immediate CA, the trust store is able to block the client from connecting to the broker. 
-### Certificate Structure: 
-**ROOT CA**
-  - IntermediateClient CA
-    - IssuingClient CA
-      - rmq-1 (**client certificate**)
-  - Intermediate Server CA 
-    - IssuingServer CA 
-      - rmq-0 (**server certificate**) 
+If the server certificate and client certificates are not signed by the same, immediate CA, the trust store is able to block the client from connecting to the broker. 
 
-2. If I limit the `trust_store.ssl_options.depth` to 1, while increases the depth of the certificate to 3, the trust store is able to block the client from connecting to the broker.  
+Certificate Structure: 
+
+- **ROOT CA**
+    - IntermediateClient CA
+      - IssuingClient CA
+        - rmq-1 (**client certificate**)
+    - Intermediate Server CA 
+      - IssuingServer CA 
+        - rmq-0 (**server certificate**) 
+
+
+### Hypothesis 2
+
+If I limit the `trust_store.ssl_options.depth` to 1, while increases the depth of the certificate to 3, the trust store is able to block the client from connecting to the broker.  
 
 Thus, I have added this line to the `rabbitmq.conf` file: 
 ```
@@ -62,6 +67,8 @@ The following line seems to have no effect on the behavior of of the broker.
 ```
 trust_store.ssl_options.depth = 1
 ```
+
+Both Hypothesis 1 and Hypothesis 2 seemed to be false. 
 
 ## Other issues faced
 1. If only partial CA-chain is provided (eg, omit the Root CA certificate) will cause SSL verification Failure. 
